@@ -1,0 +1,7 @@
+<%= form_for(@address) do |f| %>
+  <%= render 'address_errors' %>
+  <%= render 'address_fields', f: f %>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
