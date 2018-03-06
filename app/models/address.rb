@@ -5,7 +5,7 @@ class Address < ActiveRecord::Base
   validates :state, inclusion: { in: US_STATES.keys }
   validates :zip_code, numericality: true, length: { is: 5 }
 
-  def short_name
-    "#{street} : #{city} : #{zip_code}"
+  def state_zip
+    "#{state}-#{zip_code}"
   end
 end

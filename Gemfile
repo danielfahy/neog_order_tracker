@@ -34,6 +34,11 @@ gem 'whenever', require: false # job scheduler build cron like jobs
 # Use Unicorn as the app server
 # gem 'unicorn'
 
+gem 'bootstrap-sass', '~> 3.3.1' # make pretty
+
+gem 'autoprefixer-rails'
+
+
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 

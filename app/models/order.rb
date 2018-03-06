@@ -16,4 +16,21 @@ class Order < ActiveRecord::Base
   def copy_zip_from_address
     self.zip_code = address.zip_code if address.present?
   end
+
+
+  # should be in presenter
+
+  def dollar_total
+    total / 100
+  end
+
+  def color_indicator
+    if status == 'very_late'
+      'danger'
+    elsif status == 'not_normal'
+      'warning'
+    else
+      ''
+    end
+  end
 end
