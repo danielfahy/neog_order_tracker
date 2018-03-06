@@ -4,13 +4,13 @@ RSpec.describe OrderStatusUpdaterService, type: :model do
   let(:vendor) { Vendor.create(name: 'Jet') }
   subject {described_class.new.run}
   context 'when 1 order is not inside the normal duration' do
-    let!(:not_normal_orders) do
-      (0..100).map.with_index do |i|
+    let!(:normal_orders) do
+      (1..1).map.with_index do |i|
         Order.create!(
           number: '12345',
-          tracking_id: "a#{i}",
+          tracking_id: "normal#{i}",
           vendor_id: vendor.id,
-          created_at: 1.hour.ago,
+          created_at: 29.minute.ago,
           address_attributes: {
             "street"=>"94 3rd Avenue",
             "street2"=>nil,
@@ -20,13 +20,13 @@ RSpec.describe OrderStatusUpdaterService, type: :model do
         )
       end
     end
-    let!(:normal_orders) do
-      (0..100).map.with_index do |i|
+    let!(:not_normal_orders) do
+      (1..1).map.with_index do |i|
         Order.create!(
           number: '12345',
-          tracking_id: "b#{i}",
+          tracking_id: "not_normal#{i}",
           vendor_id: vendor.id,
-          created_at: 1.minute.ago,
+          created_at: 59.minutes.ago,
           address_attributes: {
             "street"=>"94 3rd Avenue",
             "street2"=>nil,
@@ -37,12 +37,12 @@ RSpec.describe OrderStatusUpdaterService, type: :model do
       end
     end
     let!(:late_orders) do
-      (0..100).map.with_index do |i|
+      (1..1).map.with_index do |i|
         Order.create!(
           number: '12345',
-          tracking_id: "c#{i}",
+          tracking_id: "late#{i}",
           vendor_id: vendor.id,
-          created_at: 2.hours.ago,
+          created_at: 60.minutes.ago,
           address_attributes: {
             "street"=>"94 3rd Avenue",
             "street2"=>nil,
@@ -55,9 +55,9 @@ RSpec.describe OrderStatusUpdaterService, type: :model do
     let!(:aggregate) do
       VendorOrderDurationAggregate.create!(
         warehouse: 1800,
-        dispatched: 3600,
-        distribution: 3600,
-        out_for_delivery: 7200,
+        dispatched: 1,
+        distribution: 1,
+        out_for_delivery: 1,
         vendor: vendor,
         zip_code: '10003'
         )

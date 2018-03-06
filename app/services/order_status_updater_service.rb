@@ -17,6 +17,11 @@ class OrderStatusUpdaterService
              ).includes(:vendor,:address)
   end
 
+  def relevant_durations
+    statuses = not_delivered_orders.map(&:tracking_status)
+    durations.select{|dur,i| statuses.include? dur}
+  end
+
   def vendor_ids
     not_delivered_orders.pluck(:vendor_id).uniq
   end
@@ -26,20 +31,20 @@ class OrderStatusUpdaterService
   end
 
   def set_statuses(vendor_id, zip)
-    durations.each do |stage,i|
+    relevant_durations.each do |duration,tracking_status_int|
       # not normal
       not_delivered_for_vendor_zip_tracking_status(
         vendor_id,
         zip,
-        i)
-        .where("created_at < ?", normal_cut_off_time(stage))
+        tracking_status_int)
+        .where("created_at < ?", normal_cut_off_time(duration))
         .update_all(status: 1)
       # very late
       not_delivered_for_vendor_zip_tracking_status(
         vendor_id,
         zip,
-        i)
-        .where("created_at < ?", late_cut_off_time(stage))
+        tracking_status_int)
+        .where("created_at < ?", late_cut_off_time(duration))
         .update_all(status: 2)
     end
   end
@@ -64,7 +69,7 @@ class OrderStatusUpdaterService
   end
 
   def normal_cut_off_time(stage)
-    Time.now.utc - (avg_duration(stage) * 1.2)
+    Time.now.utc - (avg_duration(stage))
   end
 
   def avg_duration(status)
