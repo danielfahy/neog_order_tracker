@@ -21,7 +21,7 @@ class Order < ActiveRecord::Base
   # should be in presenter
 
   def dollar_total
-    total / 100
+    total / 100.0
   end
 
   def color_indicator

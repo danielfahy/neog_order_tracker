@@ -13,3 +13,9 @@
 //= require jquery
 //= require bootstrap-sprockets
 //= require jquery_ujs
+
+jQuery(document).ready(function($) {
+  $('.clickable-cell').click(function() {
+    window.location = $(this).parent().data('href');
+  });
+});
