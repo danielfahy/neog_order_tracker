@@ -70,7 +70,7 @@ RSpec.describe OrderStatusUpdaterService, type: :model do
         expect{subject}.to change { not_normal_orders.first.reload.status }.from('normal').to('not_normal')
       end
       it 'changes the very late orders status' do
-        expect{subject}.to change { late_orders.first.reload.status }.from('normal').to('not_normal')
+        expect{subject}.to change { late_orders.first.reload.status }.from('normal').to('very_late')
       end
     end
   end
