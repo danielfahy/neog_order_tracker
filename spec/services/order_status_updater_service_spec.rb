@@ -5,7 +5,7 @@ RSpec.describe OrderStatusUpdaterService, type: :model do
   subject {described_class.new.run}
   context 'when 1 order is not inside the normal duration' do
     let!(:normal_orders) do
-      (1..1).map.with_index do |i|
+      (1..100).map.with_index do |i|
         Order.create!(
           number: '12345',
           tracking_id: "normal#{i}",
@@ -21,7 +21,7 @@ RSpec.describe OrderStatusUpdaterService, type: :model do
       end
     end
     let!(:not_normal_orders) do
-      (1..1).map.with_index do |i|
+      (1..100).map.with_index do |i|
         Order.create!(
           number: '12345',
           tracking_id: "not_normal#{i}",
@@ -37,7 +37,7 @@ RSpec.describe OrderStatusUpdaterService, type: :model do
       end
     end
     let!(:late_orders) do
-      (1..1).map.with_index do |i|
+      (1..100).map.with_index do |i|
         Order.create!(
           number: '12345',
           tracking_id: "late#{i}",

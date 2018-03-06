@@ -9,8 +9,8 @@
 
     vendors = Vendor.create([{ name: 'Jet' }, { name: 'Apple' },{ name: 'Boxed' },{ name: 'Wallmart' }])
     puts 'created vendors'
-      (0..10).map.with_index do |i|
-        puts "creating order #{i}"
+      (1..10).map.with_index do |i|
+        puts "creating yesterdays normal delivered orders #{i}"
 
         zip = '10001'
         tracking_id = "10001#{i}"
@@ -33,41 +33,41 @@
              status: 0,
              vendor_id: 1,
              zip_code: zip,
-             duration: rand(3600),
+             duration: 1800,
              created_at: 1.day.ago
            },
            { tracking_id: tracking_id,
              status: 1,
              vendor_id: 1,
              zip_code: zip,
-             duration: rand(18000),
+             duration: 3600,
              created_at: 1.day.ago
             },
            { tracking_id: tracking_id,
              status: 2,
              vendor_id: 1,
              zip_code: zip,
-             duration: rand(3600),
+             duration: 3600,
              created_at: 1.day.ago
             },
            { tracking_id: tracking_id,
              status: 3,
              vendor_id: 1,
              zip_code: zip,
-             duration: rand(3600),
+             duration: 3600,
              created_at: 1.day.ago
             },
            { tracking_id: tracking_id,
              status: 4,
              vendor_id: 1,
              zip_code: zip,
-             duration: rand(3600),
+             duration: 0, # delivery stage has no duraiton
              created_at: 1.day.ago
             }
           ])
       end
 
-    (0..10).map.with_index do |i|
+    (1..10).map.with_index do |i|
         puts "creating not normal order #{i}"
 
         zip = '10001'
@@ -77,7 +77,7 @@
             tracking_id: tracking_id,
             tracking_status: 2,
             total: 4000,
-            created_at: 1.days.ago,
+            created_at: 120.minutes.ago,
             address_attributes: {
               street: '94 3rd Avenue',
               city: 'New York',
@@ -92,15 +92,15 @@
              status: 0,
              vendor_id: 1,
              zip_code: zip,
-             duration: 3600,
-             created_at: 1.day.ago
+             duration: 1800,
+             created_at: 120.minutes.ago
            },
            { tracking_id: tracking_id,
              status: 1,
              vendor_id: 1,
              zip_code: zip,
-             duration: 36000,
-             created_at: 1.day.ago
+             duration: 5400,
+             created_at: 110.minutes.ago
             }
           ])
       end
@@ -114,7 +114,7 @@
           [{ number: "late_number#{i}",
             tracking_id: tracking_id,
             total: 4000,
-            created_at: 1.day.ago,
+            created_at: 1.5.hours.ago,
             address_attributes: {
               street: '94 3rd Avenue',
               city: 'New York',
@@ -129,16 +129,9 @@
              status: 0,
              vendor_id: 1,
              zip_code: zip,
-             duration: rand(1800),
-             created_at: 1.day.ago
-           },
-           { tracking_id: tracking_id,
-             status: 1,
-             vendor_id: 1,
-             zip_code: zip,
-             duration: rand(36000),
-             created_at: 1.day.ago
-            }
+             duration: nil, # not set yet because hasn't left warehouse
+             created_at: 1.5.hours.ago
+           }
           ])
       end
 
