@@ -1,8 +1,18 @@
-rake db:drop db:create:all db:migrate db:seed
-rails server (look at all seed orders with default progress as normal)
+# Order Tracker set up
+
+First we want to clean, migrate and seed the db
+
+`rake db:drop db:create:all db:migrate db:seed`
+
+Using one terminal you can start the rails server
+look at all seed orders with default progress (normal)
+`rails server`
+
+If you have Linux & crontab installed you can set the jobs to run in the background.
+
 whenever --update-crontab --set environment='development'
 service cron start
 
-# if you don't have linux or crontab is not working simply run
+Alternatively you can just run the rake tasks manually
 
-`rake orders:status_updater` manually for status updates
+Bulk update all active orders `rake orders:status_updater`
