@@ -1,6 +1,7 @@
 # Order Tracker set up
 
-First we want to clean, migrate and seed the db seeding takes a while...
+First we want to clean, migrate and seed the db.
+Seeding takes a while...
 
 `rake db:drop db:create:all db:migrate db:seed`
 
@@ -17,3 +18,8 @@ If you have Linux & crontab installed you can set the jobs to run in the backgro
 Alternatively you can just run the rake tasks manually
 
 Bulk update all active orders `rake orders:status_updater`
+
+
+To set up background jobs running (These matter for event creation) use
+
+`rake jobs:work`
