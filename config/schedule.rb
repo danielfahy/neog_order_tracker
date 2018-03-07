@@ -20,7 +20,7 @@
 # Learn more: http://github.com/javan/whenever
 
 every 1.day, at: '12:01 am' do
-  DailyAggregateJobsQueuerService.run
+  rake 'aggretate:daily'
 end
 
 # every 1.day, at: '1:00 am' do #TODO aggregate the aggregates
@@ -29,5 +29,5 @@ end
 # end
 
 every 1.minutes do
-  OrderStatusUpdaterService.new.run
+  rake 'orders:status_updater'
 end

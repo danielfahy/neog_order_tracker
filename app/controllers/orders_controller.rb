@@ -3,7 +3,13 @@ class OrdersController < ApplicationController
   # GET /orders
   # GET /orders.json
   def index
-    @orders = Order.order(status: :desc, tracking_status: :asc, total: :desc)
+    @orders = Order
+    .where.not(tracking_status: TrackingEvent.statuses['delivered'])
+    .order(
+      status: :desc,
+      tracking_status: :asc,
+      total: :desc
+    )
     # if had more time would put in client model and ltv calculations
   end
 
