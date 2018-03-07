@@ -2,7 +2,8 @@
   <div class="col-md-4 mb-3">
     <div class="field">
       <%= f.label :street %><br>
-      <%= f.text_field :street, class: 'form-control' %>
+      <% class_str = @error_keys.include?(:"address.street") ? 'form-control is-invalid' : 'form-control' %>
+      <%= f.text_field :street, class: class_str %>
     </div>
   </div>
   <div class="col-md-4 mb-3">
@@ -17,19 +18,22 @@
   <div class="col-md-4 mb-3">
     <div class="field">
       <%= f.label :city %><br>
-      <%= f.text_field :city,  class: 'form-control' %>
+      <% class_str = @error_keys.include?(:"address.city") ? 'form-control is-invalid' : 'form-control' %>
+      <%= f.text_field :city,  class: class_str %>
     </div>
   </div>
   <div class="col-md-4 mb-3">
     <div class="field">
       <%= f.label :state %><br>
-      <%= f.text_field :state,  class: 'form-control' %>
+      <% class_str = @error_keys.include?(:"address.state") ? 'form-control is-invalid' : 'form-control' %>
+      <%= f.text_field :state,  class: class_str%>
     </div>
   </div>
   <div class="col-md-4 mb-3">
     <div class="field">
+      <% class_str = @error_keys.include?(:"address.zip_code") ? 'form-control is-invalid' : 'form-control' %>
       <%= f.label :zip_code %><br>
-      <%= f.text_field :zip_code,  class: 'form-control' %>
+      <%= f.text_field :zip_code,  class: class_str %>
     </div>
   </div>
 </div>

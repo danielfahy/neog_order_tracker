@@ -6,7 +6,11 @@ td.clickable-cell {
 cursor: pointer
 }
 
-.btn-right {
+a.btn-right {
   float: right;
   display: inline
+}
+
+input.is-invalid, select.is-invalid {
+  border-color: #dc3545;
 }
