@@ -9,11 +9,12 @@
 
     vendors = Vendor.create([{ name: 'Jet' }, { name: 'Apple' },{ name: 'Boxed' },{ name: 'Wallmart' }])
     puts 'created vendors'
-      (1..10).map.with_index do |i|
+      (1..20).map.with_index do |i|
         puts "creating yesterdays normal delivered orders #{i}"
 
         zip = ['10001','10002'].sample
         tracking_id = "#{zip}#{i}"
+        vendor_id = [1,2].sample
         Order.create(
           [{ number: "number#{i}",
             tracking_id: tracking_id,
@@ -25,41 +26,41 @@
               state: 'NY',
               zip_code: zip
             },
-            vendor_id: 1
+            vendor_id: vendor_id
           }]
         )
         TrackingEvent.create(
           [{ tracking_id: tracking_id,
              status: 0,
-             vendor_id: 1,
+             vendor_id: vendor_id,
              zip_code: zip,
              duration: 1800,
              created_at: 1.day.ago
            },
            { tracking_id: tracking_id,
              status: 1,
-             vendor_id: 1,
+             vendor_id: vendor_id,
              zip_code: zip,
              duration: 3600,
              created_at: 1.day.ago
             },
            { tracking_id: tracking_id,
              status: 2,
-             vendor_id: 1,
+             vendor_id: vendor_id,
              zip_code: zip,
              duration: 3600,
              created_at: 1.day.ago
             },
            { tracking_id: tracking_id,
              status: 3,
-             vendor_id: 1,
+             vendor_id: vendor_id,
              zip_code: zip,
              duration: 3600,
              created_at: 1.day.ago
             },
            { tracking_id: tracking_id,
              status: 4,
-             vendor_id: 1,
+             vendor_id: vendor_id,
              zip_code: zip,
              duration: 0, # delivery stage has no duraiton
              created_at: 1.day.ago
@@ -67,7 +68,7 @@
           ])
       end
 
-    (1..10).map.with_index do |i|
+    (1..1000).map.with_index do |i|
         puts "creating not normal order #{i}"
 
         zip = '10001'
@@ -167,11 +168,6 @@
 
     puts 'deleting fake delayed jobs'
     Delayed::Job.delete_all # couldn't figure out how to prevent callbacks
-    # agg_service = DailyAggregateCalculatorService.new(zip:'10001',vendor_id:1,date:Date.yesterday)
-    # agg_service = DailyAggregateCalculatorService.new(zip:'10002',vendor_id:1,date:Date.yesterday)
-    # puts ""
-    # puts "started running aggregation service #{Time.now.utc}"
-    # agg_service.run
 
     DailyAggregateJobsQueuerService.new.run_foreground
 

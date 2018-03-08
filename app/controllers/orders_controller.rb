@@ -9,7 +9,7 @@ class OrdersController < ApplicationController
       status: :desc,
       tracking_status: :asc,
       total: :desc
-    )
+    ).includes(:address)
     # if had more time would put in client model and ltv calculations
   end
 
