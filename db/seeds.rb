@@ -12,8 +12,8 @@
       (1..10).map.with_index do |i|
         puts "creating yesterdays normal delivered orders #{i}"
 
-        zip = '10001'
-        tracking_id = "10001#{i}"
+        zip = ['10001','10002'].sample
+        tracking_id = "#{zip}#{i}"
         Order.create(
           [{ number: "number#{i}",
             tracking_id: tracking_id,
@@ -105,11 +105,11 @@
           ])
       end
 
-      (0..3).map.with_index do |i|
+      (0..1000).map.with_index do |i|
         puts "creating late order #{i}"
 
         zip = '10001'
-        tracking_id = "late_10001#{i}"
+        tracking_id = "late_#{zip}#{i}"
         Order.create(
           [{ number: "late_number#{i}",
             tracking_id: tracking_id,
@@ -135,17 +135,53 @@
           ])
       end
 
+      (0..1000).map.with_index do |i|
+        puts "creating late order #{i}"
+
+        zip = '10002'
+        tracking_id = "late_#{zip}#{i}"
+        Order.create(
+          [{ number: "late_number1#{i}",
+            tracking_id: tracking_id,
+            total: 4000,
+            created_at: 1.5.hours.ago,
+            address_attributes: {
+              street: '94 3rd Avenue',
+              city: 'New York',
+              state: 'NY',
+              zip_code: zip
+            },
+            vendor_id: 1
+          }]
+        )
+        TrackingEvent.create(
+          [{ tracking_id: tracking_id,
+             status: 0,
+             vendor_id: 1,
+             zip_code: zip,
+             duration: nil, # not set yet because hasn't left warehouse
+             created_at: 1.5.hours.ago
+           }
+          ])
+      end
+
     puts 'deleting fake delayed jobs'
     Delayed::Job.delete_all # couldn't figure out how to prevent callbacks
-    agg_service = DailyAggregateCalculatorService.new(zip:'10001',vendor_id:1,date:Date.yesterday)
-    puts ""
-    puts "started running aggregation service #{Time.now.utc}"
-    agg_service.run
-    puts ""
+    # agg_service = DailyAggregateCalculatorService.new(zip:'10001',vendor_id:1,date:Date.yesterday)
+    # agg_service = DailyAggregateCalculatorService.new(zip:'10002',vendor_id:1,date:Date.yesterday)
+    # puts ""
+    # puts "started running aggregation service #{Time.now.utc}"
+    # agg_service.run
+
+    DailyAggregateJobsQueuerService.new.run_foreground
+
     puts "finsihed running aggregation service #{Time.now.utc}"
 
-    puts 'VendorOrderDurationAggregate same as DailyAggregate since all orders yesterday anyway..'
-    attrs = DailyVendorOrderDurationAgg.first.attributes
-    attrs.delete('date')
-    VendorOrderDurationAggregate.create(attrs)
+    puts 'VendorOrderDurationAggregates same as DailyAggregates since all orders yesterday anyway..'
+
+    DailyVendorOrderDurationAgg.all.each do |a|
+      attrs = a.attributes
+      attrs.delete('date')
+      VendorOrderDurationAggregate.create(attrs)
+    end
 
